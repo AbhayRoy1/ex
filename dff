@@ -1,0 +1,37 @@
+Verilog Code for D Flip-Flop with synchronous reset:
+module d_ff (q, qb, d, clk, rst);
+output reg q;
+output qb;
+input d, clk, rst;
+always @(posedge clk)
+begin
+if (rst) 
+q = 0;
+else
+  q = d;
+end
+assign qb = ~q;
+endmodule
+  
+Testbench for D Flip-Flop with synchronous reset module:
+module d_ff_test;
+reg clk, rst, d;
+wire q, qb;
+d_ff d1(q, qb, d, clk, rst);
+initial
+begin
+$monitor (“time = %0d”, $time, “ns”, “rst =”, rst, “d =”, d, “q =”, q, “qb =”, qb);
+#40 $finish;
+end
+initial
+clk = 0;
+always
+#5 clk = ~clk;
+initial
+begin
+rst = 1; d = 0; 
+#10 rst = 0;
+#10 d = 1;
+#10 rst = 1; 
+end
+endmodule
