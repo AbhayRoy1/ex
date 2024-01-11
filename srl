@@ -1,0 +1,49 @@
+Verilog Code for SR-Latch:
+module srlatch (q, qb, s, r, en, rst);
+output reg q;
+output qb; 
+input s, r, en, rst;
+always @ (s, r, en, rst) 
+begin 
+if (rst)
+q = 0;
+else 
+if (en)
+begin
+if (s == 0 && r == 0)
+q = q;
+else 
+if (s == 0 && r == 1)
+q = 0;
+else 
+if (s == 1 && r == 0)
+q = 1;
+else 
+if (s == 1 && r == 1)
+q = 1’bx;
+end
+end
+assign qb = ~q;
+endmodule
+Testbench for SR-Latch module:
+module srlatch_test;
+reg s, r, en, rst;
+wire q, qb;
+srlatch s1(q, qb, s, r, en, rst);
+initial
+begin
+$monitor (“time = %0d”, $time, “ns”, “s =”, s, “r =”, r, “en =”, en, “rst =”, rst, “q =”, q, “qb 
+=”, qb);
+#70 $finish;
+end
+initial
+begin 
+rst = 1; en = 0; s = 1; r = 0;
+#10; rst = 0;
+#10; en = 1; 
+#10; s = 0; r = 0; 
+#10; s = 0; r = 1; 
+#10; s = 1; r = 0; 
+#10; s = 1; r = 1; 
+end
+endmodule
