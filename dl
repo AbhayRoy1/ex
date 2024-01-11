@@ -1,0 +1,44 @@
+Verilog code for D-Latch:
+module dlatch (q, qb, d, en, rst); 
+output reg q;
+output qb;
+input d, en, rst;
+always @(d, en, rst)
+begin
+if (rst) 
+q = 0;
+else
+if (en)
+q = d;
+end
+assign qb = ~q;
+endmodule
+
+Testbench for D-Latch module:
+module dlatch_test;
+reg d, en, rst;
+wire q, qb;
+dlatch d1 (q, qb, d, en, rst);
+initial
+begin
+$monitor (“time = %0d”, $time, “ns”, “d =”, d, “en =”, en, “rst =”, rst, “q =”, q, “qb =”, qb); 
+#160 $finish;
+end
+initial
+begin
+en = 0;
+d = 0;
+end
+always
+begin
+#10 d = ~d;
+#20 en = ~en;
+end
+initial
+begin 
+rst = 1;
+#10 rst = 0;
+#90 rst = 1;
+#30 rst = 0;
+end
+endmodule
