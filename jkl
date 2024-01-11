@@ -1,0 +1,49 @@
+Verilog Code for JK-Latch:
+module jklatch (q, qb, j, k, en, rst);
+output reg q;
+output qb; 
+input j, k, en, rst;
+always @ (j, k, en, rst) 
+begin 
+if (rst)
+q = 0;
+else 
+if (en)
+begin
+if (j == 0 && k == 0)
+q = q;
+else 
+if (j == 0 && k == 1)
+q = 0;
+else 
+if (j == 1 && k == 0)
+q = 1;
+else 
+if (j == 1 && k == 1)
+q = ~q;
+end
+end
+assign qb = ~q;
+endmodule
+Testbench for JK-Latch module:
+module jklatch_test;
+reg j, k, en, rst;
+wire q, qb;
+jklatch j1(q, qb, j, k, en, rst);
+initial
+begin
+$monitor (“time = %0d”, $time, “ns”, “j =”, j, “k =”, k, “en =”, en, “rst =”, rst, “q =”, q, “qb 
+=”, qb);
+#70 $finish;
+end
+initial
+begin 
+rst = 1; en = 0; j = 1; k = 0;
+#10; rst = 0;
+#10; en = 1; 
+#10; j = 0; k = 0; 
+#10; j = 0; k = 1; 
+#10; j = 1; k = 0; 
+#10; j = 1; k = 1; 
+end
+endmodule
